@@ -22,7 +22,7 @@ $('[type="button"]').on('click', generateTable);
 // }
 
 // NOTE - attach event listener to parent (document in this case):
-$(document).on('click', 'td', handleClick);
+$(document).on('click', 'td', handleClick, traverseRow);
 
 function generateTable() {
     const table = $('<table class="game-table"></table>');
@@ -61,14 +61,14 @@ function handleClick(event) {
     // $(event.target).siblings().css('background', 'yellow');
     // $(event.target).prev().css('background', 'yellow');
 
-    const targetLast = $(event.target).css('background-color').substring(4, 'background-color'.length -1).split(" ");
-    const prevSibLast = $(event.target).prev().css('background-color').substring(4, 'background-color'.length -1).split(" ");
-    console.log(targetLast);
-    console.log(prevSibLast);
+    // const targetLast = $(event.target).css('background-color').substring(4, 'background-color'.length -1).split(" ");
+    // const prevSibLast = $(event.target).prev().css('background-color').substring(4, 'background-color'.length -1).split(" ");
+    // console.log(targetLast);
+    // console.log(prevSibLast);
     
     // SECTION - returns string that is the number of the row the <td> is located in.
     const parent = $(event.target).parent().prop('class').split("");
-    console.log(parent.splice(-1, 1));
+    console.log(parent.splice(-1, 1).join(""));
     // NOTE - Equality operator cannot be used to comparing two arrays. Arrays are an object type and objects are compared based on teh references of the variables and not on the values.
     // if (targetLast[2] == prevSibLast[2]) {
     //     console.log('a match!');
@@ -77,10 +77,12 @@ function handleClick(event) {
     // }
 }
 
-// let table = document.querySelector('.game-table');
 
 function traverseRow() {
-    for (let row of table.rows) {
-        console.log(row);
+    let table = document.querySelector('.game-table');
+    for (let i = 0, row; row = table.rows[i]; i++) {
+        for (let j = 0, col; col = row.cells[j]; j++) {
+            console.log(row.cells[j]);
+        }
     }
 }
