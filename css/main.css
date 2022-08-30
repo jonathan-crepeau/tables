@@ -1,1 +1,12 @@
-body { background: peru };
+body {
+    display: block;
+    height: 100vh;
+}
+
+.game-table, td {
+    border: 1px solid black;
+}
+
+.game-table, td {
+    background: yellow;
+}
