@@ -22,17 +22,18 @@ $('[type="button"]').on('click', generateTable);
 // }
 
 // NOTE - attach event listener to parent (document in this case):
-$(document).on('click', 'td', () => {console.log('td clicked')});
+$(document).on('click', 'td', handleClick);
 
 function generateTable() {
     const table = $('<table class="game-table"></table>');
     const tableBody = $('<tbody></tbody>')
-    for (let a = 0; a < 3; a++) {
+    for (let a = 0; a < 10; a++) {
         const row = $('<tr class="row-' + a +'"></<tr>');
-        for (let b = 0; b < 3; b++) {
-            const cell = $('<td class="cell-' + b + '"></td>');
-            const cellText = document.createTextNode('cell in row ${a}, column ${b}');
-            $(cell).append(cellText);
+        for (let b = 0; b < 10; b++) {
+            const cell = $('<td class="game-square cell-' + b + '"></td>');
+            chooseColor(cell);
+            // const cellText = document.createTextNode('cell in row ${a}, column ${b}');
+            // $(cell).append(cellText);
             $(row).append(cell);
         }
         $(tableBody).append(row);
@@ -42,4 +43,17 @@ function generateTable() {
     $(table).css('border')
 }
 
-// function chooseColor()
+function chooseColor(cell) {
+    const num = Math.floor(Math.random() * (3 - 1 + 1)+ 1);
+    if (num === 1) {
+        $(cell).css('background-color', '#D3AEB5');
+    } else if (num === 2) {
+        $(cell).css('background-color', '#86679A');
+    } else {
+        $(cell).css('background-color', '#184A6E');
+    }
+}
+
+function handleClick(event) {
+    $(event.target).css('opacity', '0')
+}

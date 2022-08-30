@@ -7,6 +7,11 @@ body {
     border: 1px solid black;
 }
 
-.game-table, td {
-    background: yellow;
+.game-square {
+    height: 30px;
+    width: 30px;
+}
+
+.away {
+    background-color: white;
 }
