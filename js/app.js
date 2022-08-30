@@ -67,8 +67,7 @@ function handleClick(event) {
     // console.log(prevSibLast);
     
     // SECTION - returns string that is the number of the row the <td> is located in.
-    const parent = $(event.target).parent().prop('class').split("");
-    console.log(parent.splice(-1, 1).join(""));
+    
     // NOTE - Equality operator cannot be used to comparing two arrays. Arrays are an object type and objects are compared based on teh references of the variables and not on the values.
     // if (targetLast[2] == prevSibLast[2]) {
     //     console.log('a match!');
@@ -78,11 +77,18 @@ function handleClick(event) {
 }
 
 
-function traverseRow() {
+function traverseRow(event) {
     let table = document.querySelector('.game-table');
-    for (let i = 0, row; row = table.rows[i]; i++) {
-        for (let j = 0, col; col = row.cells[j]; j++) {
-            console.log(row.cells[j]);
-        }
+    
+
+    const parent = $(event.target).parent().prop('class').split("");
+    const rowNum = parseInt(parent.splice(-1, 1).join(""));
+    console.log(typeof rowNum);
+
+    let row = table.rows[rowNum];
+
+    for (let j = 0, cell; cell = row.cells[j]; j++) {
+        console.log(row.cells[j]);
     }
+
 }
