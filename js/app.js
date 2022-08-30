@@ -55,5 +55,22 @@ function chooseColor(cell) {
 }
 
 function handleClick(event) {
-    $(event.target).css('opacity', '0')
+    // console.log($(event.target).css('background-color'));
+    // $(event.target).css('opacity', '0')
+    // $(event.target).next().css('background', 'yellow');
+    // $(event.target).siblings().css('background', 'yellow');
+    // $(event.target).prev().css('background', 'yellow');
+
+    const targetLast = $(event.target).css('background-color').substring(4, 'background-color'.length -1).split(" ");
+    const prevSibLast = $(event.target).prev().css('background-color').substring(4, 'background-color'.length -1).split(" ");
+    console.log(targetLast);
+    console.log(prevSibLast);
+    
+    // NOTE - Equality operator cannot be used to comparing two arrays. Arrays are an object type and objects are compared based on teh references of the variables and not on the values.
+    if (targetLast[2] == prevSibLast[2]) {
+        console.log('a match!');
+    } else { 
+        console.log('not a match')
+    }
+
 }
