@@ -1,4 +1,4 @@
-console.log('Fear is the mind killer.');
+// console.log('Fear is the mind killer.');
 
 // NOTE - Multiple jQuery selectors, see list:
 $('[type="button"]').on('click', generateTable);
@@ -66,11 +66,21 @@ function handleClick(event) {
     console.log(targetLast);
     console.log(prevSibLast);
     
+    // SECTION - returns string that is the number of the row the <td> is located in.
+    const parent = $(event.target).parent().prop('class').split("");
+    console.log(parent.splice(-1, 1));
     // NOTE - Equality operator cannot be used to comparing two arrays. Arrays are an object type and objects are compared based on teh references of the variables and not on the values.
-    if (targetLast[2] == prevSibLast[2]) {
-        console.log('a match!');
-    } else { 
-        console.log('not a match')
-    }
+    // if (targetLast[2] == prevSibLast[2]) {
+    //     console.log('a match!');
+    // } else { 
+    //     console.log('not a match')
+    // }
+}
 
+// let table = document.querySelector('.game-table');
+
+function traverseRow() {
+    for (let row of table.rows) {
+        console.log(row);
+    }
 }
