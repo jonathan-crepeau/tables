@@ -46,11 +46,11 @@ function generateTable() {
 function chooseColor(cell) {
     const num = Math.floor(Math.random() * (3 - 1 + 1)+ 1);
     if (num === 1) {
-        $(cell).css('background-color', '#D3AEB5');
+        $(cell).css('background-color', '#BF1765');
     } else if (num === 2) {
-        $(cell).css('background-color', '#86679A');
+        $(cell).css('background-color', '#EDB428');
     } else {
-        $(cell).css('background-color', '#184A6E');
+        $(cell).css('background-color', '#0B2A81');
     }
 }
 
