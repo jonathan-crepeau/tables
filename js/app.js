@@ -1,6 +1,9 @@
 // NOTE - Multiple jQuery selectors, see list:
 $('[type="button"]').on('click', generateTable);
 
+// NOTE - attach event listener to parent (document in this case):
+$(document).on('click', 'td', assignEvent);
+
 function generateTable() {
     const table = $('<table class="game-table"></table>');
     const tableBody = $('<tbody></tbody>')
@@ -31,40 +34,10 @@ function chooseColor(cell) {
     }
 }
 
-// NOTE - Equality operator cannot be used to comparing two arrays. Arrays are an object type and objects are compared based on teh references of the variables and not on the values.
-
-// NOTE - attach event listener to parent (document in this case):
-
-$(document).on('click', 'td', assignEvent);
-$(document).on('click', () => {
-    const table = document.querySelector('.game-table');
-    // console.log(table.rows[0].cells[2]);
-})
-
 function assignEvent(event) {
     const square = event.target;
-    // checkImmediateSiblings(square);
-    checkAdjSib(square);
+    checkImmediateSiblings(square);
 }
-
-function checkAdjSib(element, sibType) {
-    const table = document.querySelector('.game-table');
-
-    const parentRow = parseInt($(element).parent().prop("class").split("").splice(-1, 1).join(""));
-    const cellNum = parseInt($(element).attr("class").split("").splice(-1, 1).join(""));
-
-    // if (sibType === 'top') {
-        const topSibling = table.rows[parentRow - 1].cells[cellNum];
-        $(topSibling).css('background-color', 'chartreuse');
-    // } else if (sibType === 'bottom') {
-        const bottomSibling = table.rows[parentRow + 1].cells[cellNum];
-        $(bottomSibling).css('background-color', 'chartreuse');
-    // }
-}
-
-
-
-// SECTION - Working Functions:
 
 function checkImmediateSiblings(element) {
     $(element).addClass("away");
@@ -73,7 +46,7 @@ function checkImmediateSiblings(element) {
         console.log('Next sibling a match.')
         checkImmediateSiblings($(element).next());
     } else if (!colorMatch(element, 'next') || checkClass(element, 'next')) {
-        console.log('No match for next sibling.')
+        console.log('No match for next sibling.');
     }
 
     if (colorMatch(element, 'prev') && !checkClass(element, 'prev')) {
@@ -81,7 +54,22 @@ function checkImmediateSiblings(element) {
         checkImmediateSiblings($(element).prev());
     } else if (!colorMatch(element, 'prev') || checkClass(element, 'prev')) {
         console.log('No match for previous sibling.');
-    }   
+    }
+
+    if (colorMatch(element, 'top') && !checkClass(element, 'top')) {
+        console.log('top is a match.');
+        checkImmediateSiblings(adjacentSibRgb(element, 'top'));
+    } else {
+        console.log('No match for top.')
+    }
+
+    if (colorMatch(element, 'bottom') && !checkClass(element, 'bottom')) {
+        console.log('bottom is a match.');
+        checkImmediateSiblings(adjacentSibRgb(element, 'bottom'));
+    } else {
+        console.log('No match for bottom.');
+    }
+    return;
 }
 
 function colorMatch(element, sibType) {
@@ -101,7 +89,24 @@ function colorMatch(element, sibType) {
         } else {
             return false;
         }
+    } else if (sibType === 'top') {
+        const topElem = adjacentSibRgb(element, 'top');
+        const topRgb = $(topElem).css('background-color').substring(4, 'background-color'.length - 1).split(" ");
+        if (targetLast[2] === topRgb[2]) {
+            return true;
+        } else {
+            return false;
+        }
+    } else if (sibType === 'bottom') {
+        const bottomElem = adjacentSibRgb(element, 'bottom');
+        const bottomRgb = $(bottomElem).css('background-color').substring(4, 'background-color'.length - 1).split(" ");
+        if (targetLast[2] === bottomRgb[2]) {
+            return true;
+        } else {
+            return false;
+        }
     }
+
 }
 
 function checkClass(element, sibType) {
@@ -109,7 +114,25 @@ function checkClass(element, sibType) {
         return $(element).next().hasClass("away");
     } else if (sibType === 'prev') {
         return $(element).prev().hasClass("away");
-    }   
+    } else if (sibType === 'top') {
+        const topElem = adjacentSibRgb(element, 'top');
+        return $(topElem).hasClass("away");
+    } else if (sibType === 'bottom') {
+        const bottomElem = adjacentSibRgb(element, 'bottom');
+        return $(bottomElem).hasClass("away");
+    }
 }
 
+function adjacentSibRgb(element, sibType) {
+    const table = document.querySelector('.game-table');
 
+    const parentRow = parseInt($(element).parent().prop("class").split("").splice(-1, 1).join(""));
+    const cellNum = $(element).attr("class").split("").splice(-6, 1).join("");
+    
+    if (sibType === 'top') {
+        return table.rows[parentRow - 1].cells[cellNum];
+    } else if (sibType === 'bottom') {
+        return table.rows[parentRow + 1].cells[cellNum];
+    }
+
+}
