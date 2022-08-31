@@ -1,5 +1,3 @@
-// console.log('Fear is the mind killer.');
-
 // NOTE - Multiple jQuery selectors, see list:
 $('[type="button"]').on('click', generateTable);
 
@@ -33,42 +31,47 @@ function chooseColor(cell) {
     }
 }
 
-// console.log($(event.target).css('background-color'));
-// $(event.target).css('opacity', '0')
-// $(event.target).next().css('background', 'yellow');
-// $(event.target).siblings().css('background', 'yellow');
-// $(event.target).prev().css('background', 'yellow');
-
 // NOTE - Equality operator cannot be used to comparing two arrays. Arrays are an object type and objects are compared based on teh references of the variables and not on the values.
 
+// NOTE - attach event listener to parent (document in this case):
 
-function traverseRow(event) {
-    let table = document.querySelector('.game-table');
+$(document).on('click', 'td', assignEvent);
 
-    const parent = $(event.target).parent().prop('class').split("");
-    const rowNum = parseInt(parent.splice(-1, 1).join(""));
-    console.log(typeof rowNum);
-
-    let row = table.rows[rowNum];
-
-    for (let j = 0, cell; cell = row.cells[j]; j++) {
-        console.log(row.cells[j]);
-    }
-
+function assignEvent(event) {
+    const square = event.target;
+    checkImmediateSiblings(square);
 }
 
-function siblingRgb(event, sibType) {
-    const targetLast = $(event.target).css('background-color').substring(4, 'background-color'.length -1).split(" ");
+function checkImmediateSiblings(element) {
+    $(element).addClass("away");
+
+    if (colorMatch(element, 'next') && !checkClass(element, 'next')) {
+        console.log('Next sibling a match.')
+        checkImmediateSiblings($(element).next());
+    } else if (!colorMatch(element, 'next') || checkClass(element, 'next')) {
+        console.log('No match for next sibling.')
+    }
+
+    if (colorMatch(element, 'prev') && !checkClass(element, 'prev')) {
+        console.log('Previous sibling a match.');
+        checkImmediateSiblings($(element).prev());
+    } else if (!colorMatch(element, 'prev') || checkClass(element, 'prev')) {
+        console.log('No match for previous sibling.');
+    }   
+}
+
+function colorMatch(element, sibType) {
+    const targetLast = $(element).css('background-color').substring(4, 'background-color'.length -1).split(" ");
 
     if (sibType === 'prev') {
-        const prevRgb = $(event.target).prev().css('background-color').substring(4, 'background-color'.length -1).split(" ");
+        const prevRgb = $(element).prev().css('background-color').substring(4, 'background-color'.length -1).split(" ");
         if (targetLast[2] === prevRgb[2]) {
             return true;
         } else {
             return false;
         }
     } else if (sibType === 'next') {
-        const nextRgb = $(event.target).next().css("background-color").substring(4, 'background-color'.length -1).split(" ");
+        const nextRgb = $(element).next().css("background-color").substring(4, 'background-color'.length -1).split(" ");
         if (targetLast[2] === nextRgb[2]) {
             return true;
         } else {
@@ -77,42 +80,12 @@ function siblingRgb(event, sibType) {
     }
 }
 
-// NOTE - attach event listener to parent (document in this case):
-$(document).on('click', 'td', checkImmediateSiblings);
-
-// function checkAwayStatus(event) {
-//     if (checkClass(event)) {
-//         console.log('true');
-//     } else if (!checkClass(event)) {
-//         console.log('false');
-//     } else {
-//         console.log('error');
-//     }
-// }
-
-function checkClass(event, sibType) {
+function checkClass(element, sibType) {
     if (sibType === 'next') {
-        return $(event.target).next().hasClass("away");
+        return $(element).next().hasClass("away");
     } else if (sibType === 'prev') {
-        return $(event.target).prev().hasClass("away");
+        return $(element).prev().hasClass("away");
     }   
 }
 
-function checkImmediateSiblings(event) {
-    $(event.target).addClass("away");
-    console.log($(event.target));
-    if (siblingRgb(event, 'next') && !checkClass(event, 'next')) {
-        console.log('Next sibling a match.')
-    } else if (!siblingRgb(event, 'next') || checkClass(event, 'next')) {
-        console.log('No match for next sibling.')
-    }
-
-    if (siblingRgb(event, 'prev') && !checkClass(event, 'prev')) {
-        console.log('Previous sibling a match.');
-    } else if (!siblingRgb(event, 'prev') || checkClass(event, 'prev')) {
-        console.log('No match for previous sibling.');
-    }
-    
-    
-}
 
