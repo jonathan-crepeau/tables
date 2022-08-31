@@ -36,11 +36,35 @@ function chooseColor(cell) {
 // NOTE - attach event listener to parent (document in this case):
 
 $(document).on('click', 'td', assignEvent);
+$(document).on('click', () => {
+    const table = document.querySelector('.game-table');
+    // console.log(table.rows[0].cells[2]);
+})
 
 function assignEvent(event) {
     const square = event.target;
-    checkImmediateSiblings(square);
+    // checkImmediateSiblings(square);
+    checkAdjSib(square);
 }
+
+function checkAdjSib(element, sibType) {
+    const table = document.querySelector('.game-table');
+
+    const parentRow = parseInt($(element).parent().prop("class").split("").splice(-1, 1).join(""));
+    const cellNum = parseInt($(element).attr("class").split("").splice(-1, 1).join(""));
+
+    // if (sibType === 'top') {
+        const topSibling = table.rows[parentRow - 1].cells[cellNum];
+        $(topSibling).css('background-color', 'chartreuse');
+    // } else if (sibType === 'bottom') {
+        const bottomSibling = table.rows[parentRow + 1].cells[cellNum];
+        $(bottomSibling).css('background-color', 'chartreuse');
+    // }
+}
+
+
+
+// SECTION - Working Functions:
 
 function checkImmediateSiblings(element) {
     $(element).addClass("away");
