@@ -3,27 +3,6 @@
 // NOTE - Multiple jQuery selectors, see list:
 $('[type="button"]').on('click', generateTable);
 
-// function generateTable() {
-//     const table = document.createElement("table");
-//     const tableBody = document.createElement("tbody");
-//     for (let a = 0; a < 2; a++) {
-//         const row = document.createElement("tr");
-//         for(let b = 0; b < 2; b++) {
-//             const cell = document.createElement('td');
-//             const cellText = document.createTextNode(`cell in row ${a}, column ${b}`);
-//             cell.appendChild(cellText);
-//             row.appendChild(cell);
-//         }
-//         tableBody.appendChild(row);
-//     }
-//     table.appendChild(tableBody);
-//     document.body.appendChild(table);
-//     table.setAttribute("border", "1");
-// }
-
-// NOTE - attach event listener to parent (document in this case):
-$(document).on('click', 'td', handleClick, traverseRow);
-
 function generateTable() {
     const table = $('<table class="game-table"></table>');
     const tableBody = $('<tbody></tbody>')
@@ -54,32 +33,17 @@ function chooseColor(cell) {
     }
 }
 
-function handleClick(event) {
-    // console.log($(event.target).css('background-color'));
-    // $(event.target).css('opacity', '0')
-    // $(event.target).next().css('background', 'yellow');
-    // $(event.target).siblings().css('background', 'yellow');
-    // $(event.target).prev().css('background', 'yellow');
+// console.log($(event.target).css('background-color'));
+// $(event.target).css('opacity', '0')
+// $(event.target).next().css('background', 'yellow');
+// $(event.target).siblings().css('background', 'yellow');
+// $(event.target).prev().css('background', 'yellow');
 
-    // const targetLast = $(event.target).css('background-color').substring(4, 'background-color'.length -1).split(" ");
-    // const prevSibLast = $(event.target).prev().css('background-color').substring(4, 'background-color'.length -1).split(" ");
-    // console.log(targetLast);
-    // console.log(prevSibLast);
-    
-    // SECTION - returns string that is the number of the row the <td> is located in.
-    
-    // NOTE - Equality operator cannot be used to comparing two arrays. Arrays are an object type and objects are compared based on teh references of the variables and not on the values.
-    // if (targetLast[2] == prevSibLast[2]) {
-    //     console.log('a match!');
-    // } else { 
-    //     console.log('not a match')
-    // }
-}
+// NOTE - Equality operator cannot be used to comparing two arrays. Arrays are an object type and objects are compared based on teh references of the variables and not on the values.
 
 
 function traverseRow(event) {
     let table = document.querySelector('.game-table');
-    
 
     const parent = $(event.target).parent().prop('class').split("");
     const rowNum = parseInt(parent.splice(-1, 1).join(""));
@@ -92,3 +56,63 @@ function traverseRow(event) {
     }
 
 }
+
+function siblingRgb(event, sibType) {
+    const targetLast = $(event.target).css('background-color').substring(4, 'background-color'.length -1).split(" ");
+
+    if (sibType === 'prev') {
+        const prevRgb = $(event.target).prev().css('background-color').substring(4, 'background-color'.length -1).split(" ");
+        if (targetLast[2] === prevRgb[2]) {
+            return true;
+        } else {
+            return false;
+        }
+    } else if (sibType === 'next') {
+        const nextRgb = $(event.target).next().css("background-color").substring(4, 'background-color'.length -1).split(" ");
+        if (targetLast[2] === nextRgb[2]) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+// NOTE - attach event listener to parent (document in this case):
+$(document).on('click', 'td', checkImmediateSiblings);
+
+// function checkAwayStatus(event) {
+//     if (checkClass(event)) {
+//         console.log('true');
+//     } else if (!checkClass(event)) {
+//         console.log('false');
+//     } else {
+//         console.log('error');
+//     }
+// }
+
+function checkClass(event, sibType) {
+    if (sibType === 'next') {
+        return $(event.target).next().hasClass("away");
+    } else if (sibType === 'prev') {
+        return $(event.target).prev().hasClass("away");
+    }   
+}
+
+function checkImmediateSiblings(event) {
+    $(event.target).addClass("away");
+    console.log($(event.target));
+    if (siblingRgb(event, 'next') && !checkClass(event, 'next')) {
+        console.log('Next sibling a match.')
+    } else if (!siblingRgb(event, 'next') || checkClass(event, 'next')) {
+        console.log('No match for next sibling.')
+    }
+
+    if (siblingRgb(event, 'prev') && !checkClass(event, 'prev')) {
+        console.log('Previous sibling a match.');
+    } else if (!siblingRgb(event, 'prev') || checkClass(event, 'prev')) {
+        console.log('No match for previous sibling.');
+    }
+    
+    
+}
+

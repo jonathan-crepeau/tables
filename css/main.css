@@ -3,15 +3,21 @@ body {
     height: 100vh;
 }
 
-.game-table, td {
-    border: 1px solid black;
-}
-
 .game-square {
     height: 30px;
     width: 30px;
 }
 
+.game-table {
+    border: 2px black solid;
+    border-collapse: separate;
+    border-spacing: 4px;
+}
+
+.game-table td {
+    border: 1px black solid;
+}
+
 .away {
-    background-color: white;
+    opacity: 0 !important;
 }
